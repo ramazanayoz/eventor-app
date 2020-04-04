@@ -1,0 +1,41 @@
+  
+import 'package:eventor/denem9-firebaseTum/ui/screens/forgot_password.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'denem9-firebaseTum/ui/theme.dart';
+import 'denem9-firebaseTum/ui/screens/sign_in.dart';
+import 'denem9-firebaseTum/ui/screens/sign_up.dart';
+import 'denem9-firebaseTum/util/auth.dart';
+import 'denem9-firebaseTum/util/state_widget.dart';
+import 'denem9-firebaseTum/ui/screens/home.dart';
+
+class MyApp extends StatelessWidget {
+  MyApp() {
+    //Navigation.initPaths();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ ChangeNotifierProvider(create: (_) => XAuth()) ],
+      child:MaterialApp(
+        title: 'MyApp Title',
+        theme: buildTheme(),
+        //onGenerateRoute: Navigation.router.generator,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/': (context) => XHomeScreen(),
+          '/signin': (context) => SignInScreen(),
+          '/signup': (context) => SignUpScreen(),
+          '/forgot-password': (context) => XForgotPasswordScreen(),
+        },
+      ),
+    );
+  }
+}
+
+void main() {
+  XStateWidget stateWidget = new XStateWidget(
+    child: new MyApp(),
+  );
+  runApp(stateWidget);
+}
