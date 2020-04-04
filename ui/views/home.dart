@@ -23,19 +23,6 @@ class _XHomeScreenState extends State<XHomeScreen> {
 
     appState = XStateWidget.of(context).state;
 
-    //home ekranında user bilgileri yoksa direk signin ekranına geç
-    if (!appState.isLoading &&    //bunlar yerine gelmediyse signin'e geç
-        (appState.firebaseUserAuth == null ||
-            appState.user == null ||
-            appState.settings == null)) {
-      return SignInScreen();
-    } else {
-      if (appState.isLoading) {
-        _loadingVisible = true;
-      } else {
-        _loadingVisible = false;
-      }
-
       //database bilgileri alınıyor state classından 
       final userId = appState?.firebaseUserAuth?.uid ?? ''; 
       print("not:home: appState?.firebaseUserAuth?.uid ?? : userid ${appState?.firebaseUserAuth?.uid ?? ''}");
@@ -125,6 +112,6 @@ class _XHomeScreenState extends State<XHomeScreen> {
             ),
             inAsyncCall: _loadingVisible),
       );
-    }
+    
   }
 }

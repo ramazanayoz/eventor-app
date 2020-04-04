@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../core/viewsmodels/auth_model.dart';
 import '../../core/services/validator.dart';
+import '../widgets/bottom_navigation_widget.dart';
 
 class SignInScreen extends StatefulWidget {
   _SignInScreenState createState() => _SignInScreenState();
