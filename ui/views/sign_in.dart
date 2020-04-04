@@ -4,8 +4,8 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../util/auth.dart';
-import '../../util/validator.dart';
+import '../../core/viewsmodels/auth_model.dart';
+import '../../core/services/validator.dart';
 
 class SignInScreen extends StatefulWidget {
   _SignInScreenState createState() => _SignInScreenState();
@@ -39,12 +39,12 @@ class _SignInScreenState extends State<SignInScreen> {
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
         //await XStateWidget.of(context).logInUser(email, password);
-        await Provider.of<XAuth>(context).logInUser(email, password, context);
+        await Provider.of<XAuthModel>(context).logInUser(email, password, context);
         await Navigator.pushNamed(context, '/');
       } catch (e) {
         _changeLoadingVisible();
         print("Sign In Error: $e");
-        String exception = XAuth.getExceptionText(e);
+        String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e);
         Flushbar(
           title: "Sign In Error",
           message: exception,

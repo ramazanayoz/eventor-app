@@ -3,9 +3,9 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/user.dart';
-import '../../util/auth.dart';
-import '../../util/validator.dart';
+import '../../core/models/user.dart';
+import '../../core/viewsmodels/auth_model.dart';
+import '../../core/services/validator.dart';
 import '../../ui/widgets/loading.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _email = new TextEditingController();
   final TextEditingController _password = new TextEditingController();
 
-  XAuth xauth = XAuth();
+  XAuthModel xauth = XAuthModel();
 
   bool _autoValidate = true;
   bool _loadingVisible = false;
@@ -43,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
-        await Provider.of<XAuth>(context,listen: false).signUp(email, password).then((uID) {
+        await Provider.of<XAuthModel>(context,listen: false).signUp(email, password).then((uID) {
           xauth.addUserSettingsDB(new XUser(
             userId: uID,
             email: email,
@@ -57,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } catch (e) {
           _changeLoadingVisible();
           print("Sign Up Error: $e");
-          String exception = XAuth.getExceptionText(e);
+          String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e); 
           Flushbar(
             title: "Sign Up Error",
             message: exception,

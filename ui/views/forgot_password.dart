@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
 
-import '../../util/auth.dart';
-import '../../util/validator.dart';
+import '../../core/viewsmodels/auth_model.dart';
+import '../../core/services/validator.dart';
 import '../../ui/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +37,7 @@ class _XForgotPasswordScreenState extends State<XForgotPasswordScreen> {
       try {
         await _changeLoadingVisible();
         //await XAuth.forgotPasswordEmail(email);
-        await Provider.of<XAuth>(context).forgotPasswordEmail(email);
+        await Provider.of<XAuthModel>(context).forgotPasswordEmail(email);
         await _changeLoadingVisible();
         Flushbar(
           title: "Password Reset Email Sent",
@@ -48,7 +48,7 @@ class _XForgotPasswordScreenState extends State<XForgotPasswordScreen> {
       } catch (e) {
         _changeLoadingVisible();
         print("Forgot Password Error: $e");
-        String exception = XAuth.getExceptionText(e);
+        String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e);
         Flushbar(
           title: "Forgot Password Error",
           message: exception,

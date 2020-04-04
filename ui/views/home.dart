@@ -1,9 +1,9 @@
-import 'package:eventor/denem9-firebaseTum/util/auth.dart';
+import '../../core/viewsmodels/auth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/state.dart';
-import '../../util/state_widget.dart';
-import '../../ui/screens/sign_in.dart';
+import '../../core/models/state.dart';
+import '../../core/services/state_widget.dart';
+import '../../ui/views/sign_in.dart';
 import '../../ui/widgets/loading.dart';
 
 class XHomeScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class _XHomeScreenState extends State<XHomeScreen> {
           ),
           onPressed: () {
            // XStateWidget.of(context).logOutUser();
-            Provider.of<XAuth>(context).logOutUser(context);
+            Provider.of<XAuthModel>(context).logOutUser(context);
           },
           padding: EdgeInsets.all(12),
           color: Theme.of(context).primaryColor,
