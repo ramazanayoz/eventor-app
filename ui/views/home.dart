@@ -5,6 +5,7 @@ import '../../core/models/state.dart';
 import '../../core/services/state_widget.dart';
 import '../../ui/views/sign_in.dart';
 import '../../ui/widgets/loading.dart';
+import '../widgets/side_bar_drawer.dart';
 
 class XHomeScreen extends StatefulWidget {
   _XHomeScreenState createState() => _XHomeScreenState();
@@ -18,6 +19,9 @@ class _XHomeScreenState extends State<XHomeScreen> {
   void initState() {
     super.initState();
   }
+
+
+
   //DESİGN
   Widget build(BuildContext context) {
 
@@ -60,7 +64,7 @@ class _XHomeScreenState extends State<XHomeScreen> {
           ),
           onPressed: () {
            // XStateWidget.of(context).logOutUser();
-            Provider.of<XAuthModel>(context).logOutUser(context);
+            Provider.of<XAuthModel>(context).logOutUser(context); 
           },
           padding: EdgeInsets.all(12),
           color: Theme.of(context).primaryColor,
@@ -70,6 +74,8 @@ class _XHomeScreenState extends State<XHomeScreen> {
 
       return Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(title:  Text(""), backgroundColor: Colors.blueGrey),
+        drawer: new XSideBarDrawer(firstName,lastName,email), //sidebarDrawer
         body: LoadingScreen(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 48.0),

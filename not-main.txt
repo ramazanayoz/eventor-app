@@ -8,6 +8,8 @@ import 'denem9-firebaseTum/ui/views/sign_up.dart';
 import 'denem9-firebaseTum/core/viewsmodels/auth_model.dart';
 import 'denem9-firebaseTum/core/services/state_widget.dart';
 import 'denem9-firebaseTum/ui/views/home.dart';
+import 'denem9-firebaseTum/ui/widgets/bottom_navigation_widget.dart';
+
 
 class MyApp extends StatelessWidget {
   MyApp() {
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
         //onGenerateRoute: Navigation.router.generator,
         debugShowCheckedModeBanner: false,
         routes: {
-          '/': (context) => XHomeScreen(),
+          '/': (context) => XBottomNavigationWidget(),
           '/signin': (context) => SignInScreen(),
           '/signup': (context) => SignUpScreen(),
           '/forgot-password': (context) => XForgotPasswordScreen(),

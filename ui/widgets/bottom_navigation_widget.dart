@@ -35,6 +35,10 @@ class _XBottomNavigationWidgetState extends State<XBottomNavigationWidget> {
     super.initState();
   }
 
+  void SetcurrentIndex(index){
+      _currentIndex = index;
+  }
+
   @override
   Widget build(BuildContext context) {
 
