@@ -1,4 +1,5 @@
 
+import 'package:eventor/assets/my_custom_icons.dart';
 import 'package:eventor/denem9-firebaseTum/core/viewsmodels/auth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class XSideBarDrawer extends StatelessWidget{
               trailing: Icon(Icons.add, color: Colors.blue),
               onTap: (){ 
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => new XHomeScreen()));
+                Navigator.pushNamed(context, '/event-create');
               },
             ),
             new ListTile(
@@ -75,21 +76,21 @@ class XSideBarDrawer extends StatelessWidget{
               },             ),
             new ListTile(
               title: Text("Contact Us"),
-              trailing: Icon(Icons.contacts, color: Colors.blueAccent),
+              trailing: Icon(Icons.contact_mail, color: Colors.blueAccent),
               onTap: (){  
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => new XHomeScreen()));
               },             ),
             new ListTile(
               title: Text("About Us"),
-              trailing: Icon(Icons.arrow_upward),
+              trailing: Icon(MyCustomIcons.aboutUs),
               onTap: (){ 
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => new XHomeScreen()));
               },             ),
             new ListTile(
               title: Text("Privacy Policy"),
-              trailing: Icon(Icons.arrow_right),
+              trailing: Icon(MyCustomIcons.privacyPoliticy),
               onTap: (){ 
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => new XHomeScreen()));

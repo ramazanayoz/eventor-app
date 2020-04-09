@@ -19,7 +19,7 @@ class XAuthModel extends ChangeNotifier{
   XApi xapi = XApi("users");
 
   //SİGN UP KISIM
-   Future<String> signUp(String email, String password) async {
+  Future<String> signUp(String email, String password) async {
      print("signUp working");
     return xapi.createUser(email, password);
   }

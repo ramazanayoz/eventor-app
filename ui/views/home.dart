@@ -25,7 +25,7 @@ class _XHomeScreenState extends State<XHomeScreen> {
   //DESİGN
   Widget build(BuildContext context) {
 
-    appState = XStateWidget.of(context).state;
+    appState = XStateWidget.of(context).state; 
 
       //database bilgileri alınıyor state classından 
       final userId = appState?.firebaseUserAuth?.uid ?? ''; 

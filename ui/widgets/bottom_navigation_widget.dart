@@ -7,6 +7,7 @@ import '../../ui/views/home.dart';
 import '../../ui/views/category.dart';
 import '../../ui/views/agenda.dart';
 import '../../ui/views/tickets.dart'; 
+import 'package:eventor/assets/my_custom_icons.dart';
 
 
 class XBottomNavigationWidget extends StatefulWidget {
@@ -74,29 +75,29 @@ class _XBottomNavigationWidgetState extends State<XBottomNavigationWidget> {
             ),
             BottomNavigationBarItem( // 2.kısım
                 icon: Icon(
-                  Icons.email,
+                  MyCustomIcons.search,
                   color: _bottomNavigationColor,
                 ),
                 title: Text(
-                  'Email',
+                  'Events',
                   style: TextStyle(color: _bottomNavigationColor),
                 )),
             BottomNavigationBarItem( //3.kısım
                 icon: Icon(
-                  Icons.pages,
+                  MyCustomIcons.calendar,
                   color: _bottomNavigationColor,
                 ),
                 title: Text(
-                  'PAGES',
+                  'Calendar',
                   style: TextStyle(color: _bottomNavigationColor),
                 )),
             BottomNavigationBarItem( //5.kısım
                 icon: Icon(
-                  Icons.airplay,
+                  MyCustomIcons.ticket,
                   color: _bottomNavigationColor,
                 ),
                 title: Text(
-                  'AİRPLAY',
+                  'Tickets',
                   style: TextStyle(color: _bottomNavigationColor),
                 )
             ),

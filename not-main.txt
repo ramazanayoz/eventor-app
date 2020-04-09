@@ -1,3 +1,4 @@
+
   
 import 'package:eventor/denem9-firebaseTum/ui/views/forgot_password.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'denem9-firebaseTum/core/viewsmodels/auth_model.dart';
 import 'denem9-firebaseTum/core/services/state_widget.dart';
 import 'denem9-firebaseTum/ui/views/home.dart';
 import 'denem9-firebaseTum/ui/widgets/bottom_navigation_widget.dart';
+import 'denem9-firebaseTum/ui/views/event_create.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -29,6 +31,7 @@ class MyApp extends StatelessWidget {
           '/signin': (context) => SignInScreen(),
           '/signup': (context) => SignUpScreen(),
           '/forgot-password': (context) => XForgotPasswordScreen(),
+          '/event-create' : (context) => XEventCreate(),
         },
       ),
     );
@@ -41,3 +44,5 @@ void main() {
   );
   runApp(stateWidget);
 }
+
+ 
