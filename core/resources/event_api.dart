@@ -1,39 +1,42 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/location.dart';
-import 'package:eventor/denem9-firebaseTum/core/services/event_api.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-class XCrudModel extends ChangeNotifier{
-  //VAR
-  static XEventApi _eventApi = XEventApi("events");
+
+class XEventApi{
+ 
+  final Firestore _db = Firestore.instance;
+  final String path;
+  CollectionReference ref;
+  String _documentId;
   static String _eventId;
 
-  //FUNCT
-  static Future addEventDatabase(XEvent xevent) async{
-    _eventId = await _eventApi.addEventToDatabase(xevent.classObjConvertToJson()).then((onValue)  {
-      return  onValue.documentID;
-    });  
-    xevent.eventId =  _eventId;
-   // print("kokokokok: ${xevent.eventId}");
-    await _eventApi.setEventToDatabase(xevent);
-
+  XEventApi(this.path){
+    ref = _db.collection(path);
   }
 
-  static Future addLocationDatabase(XLocation xlocation) async{
+
+  Future<void> addEventToDatabase(XEvent xevent) async {
+      Map<String, dynamic>  mapobject = xevent.classObjConvertToJson();
+      DocumentReference documentId= await ref.add(mapobject);
+      _eventId = documentId.documentID;
+      xevent.eventId =  _eventId;
+    await  _db.collection("events").document(xevent.eventId).setData(xevent.classObjConvertToJson());
+  }
+
+
+
+  Future<void> addLocationToDatabase(XLocation xlocation) async {
     xlocation.eventId = _eventId;
-    await _eventApi.setLocationToDatabase(xlocation);
+    await _db.collection("locations").document(_documentId).setData(xlocation.classObjConvertToJson());
   }
 
 
 
-  static Future<String> uploadImage(File image,String name) async{
+  Future<String> uploadImage(File image,String name) async{
     try {
       //make random image name.
       String imageLocation = 'images/events/events-$name-${new DateFormat("yyyy-MM-dd-HH:mm").format(new DateTime.now())}.jpg';
@@ -43,15 +46,14 @@ class XCrudModel extends ChangeNotifier{
       final StorageUploadTask uploadTask = strogaReference.putFile(image);
       await uploadTask.onComplete;
      // _addPathToDatabase(imageLocation);
-      return imageLocation;
+      return imageLocation; 
 
     }catch(e){
       print(e.message);
     }
   }
-  
 
-  static Future<String> getImageUrl(String textImageLocation)async{
+  Future<String> getImageUrl(String textImageLocation)async{
      try{
       //get image Url from firebase
       final ref = FirebaseStorage().ref().child(textImageLocation);
@@ -63,5 +65,6 @@ class XCrudModel extends ChangeNotifier{
       print(e.message);
     }
   }
+
 
 }

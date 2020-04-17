@@ -1,10 +1,10 @@
+import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'package:eventor/denem9-firebaseTum/ui/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/viewsmodels/auth_model.dart';
 import '../../core/services/validator.dart';
 import '../widgets/bottom_navigation_widget.dart';
 

@@ -1,6 +1,6 @@
 
 import 'package:eventor/assets/my_custom_icons.dart';
-import 'package:eventor/denem9-firebaseTum/core/viewsmodels/auth_model.dart';
+import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../views/home.dart';

@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/state.dart';
 import '../models/user.dart';
 import '../models/settings.dart';
-import '../../core/viewsmodels/auth_model.dart';
 
 class XStateWidget extends StatefulWidget {
   final XStateModel state;
@@ -32,6 +32,7 @@ class _XStateWidgetState extends State<XStateWidget> {
   XStateModel state;
   //GoogleSignInAccount googleAccount;
   //final GoogleSignIn googleSignIn = new GoogleSignIn();
+  XAuthModel _xAuthModel = XAuthModel();
 
   @override
   void initState() {
@@ -47,9 +48,9 @@ class _XStateWidgetState extends State<XStateWidget> {
 
   Future<Null> initUser() async {
    // print('not:XStateWidget da...initUser... working');
-    FirebaseUser firebaseUserAuth = await XAuthModel.getCurrentFirebaseUser(); //şuanki kullanıcıya ulaş
-    XUser user = await XAuthModel.getUserLocal(); //telefona kaydedilmiş giriş bilgisi alınıyot
-    XSettings settings = await XAuthModel.getSettingsLocal(); //yerel ayarları al
+    FirebaseUser firebaseUserAuth = await _xAuthModel.getCurrentFirebaseUser(); //şuanki kullanıcıya ulaş
+    XUser user = await _xAuthModel.getUserLocal(); //telefona kaydedilmiş giriş bilgisi alınıyot
+    XSettings settings = await _xAuthModel.getSettingsLocal(); //yerel ayarları al
     setState(() {
       state.isLoading = false;
       state.firebaseUserAuth = firebaseUserAuth;

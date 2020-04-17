@@ -5,9 +5,8 @@ import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/location.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/state.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/user.dart';
+import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/state_widget.dart';
-import 'package:eventor/denem9-firebaseTum/core/viewsmodels/auth_model.dart';
-import 'package:eventor/denem9-firebaseTum/core/viewsmodels/crud_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -45,6 +44,8 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
   List<XCategory> _categorieslist = XCategory.getCategories();
   List<DropdownMenuItem<XCategory>> _dropdownMenuItemslist;
   XCategory _selectedCategory;
+
+  XAuthModel _authModel = XAuthModel();
 
   //FUNCT 
   @override
@@ -93,14 +94,14 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
       String imageUrl;
       String imageLocation;
       if(_image != null){
-         imageLocation = await XCrudModel.uploadImage(_image, name);
-         imageUrl = await XCrudModel.getImageUrl(imageLocation,);
+         imageLocation = await _authModel.uploadImage(_image, name);
+         imageUrl = await _authModel.getImageUrl(imageLocation,);
       }
 
       
      // print("kasda:" +imageUrl+ " asdasd:"+ imageLocatin);
 
-       await XCrudModel.addEventDatabase(new XEvent(
+       await _authModel.addEventDatabase(new XEvent(
           userId: appState.user.userId,  
           imageLocation: imageLocation,
           imageUrl: imageUrl,
@@ -115,7 +116,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
           description: description
        ));
        
-       await XCrudModel.addLocationDatabase(new XLocation( 
+       await _authModel.addLocationDatabase(new XLocation( 
          city: city,
          state: state,
          address: address,
