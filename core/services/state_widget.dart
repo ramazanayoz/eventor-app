@@ -32,7 +32,7 @@ class _XStateWidgetState extends State<XStateWidget> {
   XStateModel state;
   //GoogleSignInAccount googleAccount;
   //final GoogleSignIn googleSignIn = new GoogleSignIn();
-  XAuthModel _xAuthModel = XAuthModel();
+  XFirebaseMethod _xAuthModel = XFirebaseMethod();
 
   @override
   void initState() {

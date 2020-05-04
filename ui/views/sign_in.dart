@@ -40,12 +40,12 @@ class _SignInScreenState extends State<SignInScreen> {
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
         //await XStateWidget.of(context).logInUser(email, password);
-        await Provider.of<XAuthModel>(context).logInUser(email, password, context);
+        await Provider.of<XFirebaseMethod>(context).logInUser(email, password, context);
         await Navigator.pushNamed(context, '/');
       } catch (e) {
         _changeLoadingVisible();
         print("Sign In Error: $e");
-        String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e);
+        String exception = Provider.of<XFirebaseMethod>(context,listen: false).getExceptionText(e);
         Flushbar(
           title: "Sign In Error",
           message: exception,

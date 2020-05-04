@@ -1,10 +1,10 @@
 import 'package:eventor/denem9-firebaseTum/core/models/state.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/state_widget.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/eventsScreen.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/sign_in.dart';
 import 'package:flutter/material.dart';
 //
 import '../../ui/views/home.dart';
-import '../../ui/views/category.dart';
 import '../../ui/views/agenda.dart';
 import '../../ui/views/tickets.dart'; 
 import 'package:eventor/assets/my_custom_icons.dart';
@@ -29,7 +29,7 @@ class _XBottomNavigationWidgetState extends State<XBottomNavigationWidget> {
   void initState() {
     _list
       ..add(XHomeScreen())
-      ..add(XCategoryScreen())
+      ..add(XEventScreen())
       ..add(XAgendaScreen())
       ..add(XTicketsScreen()); //listeye tek satırda eklemek farklı bir yol .. ile bağlantı yapıldı
     //print('_list: $_list'); 

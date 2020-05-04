@@ -37,7 +37,7 @@ class _XForgotPasswordScreenState extends State<XForgotPasswordScreen> {
       try {
         await _changeLoadingVisible();
         //await XAuth.forgotPasswordEmail(email);
-        await Provider.of<XAuthModel>(context).forgotPasswordEmail(email);
+        await Provider.of<XFirebaseMethod>(context).forgotPasswordEmail(email);
         await _changeLoadingVisible();
         Flushbar(
           title: "Password Reset Email Sent",
@@ -48,7 +48,7 @@ class _XForgotPasswordScreenState extends State<XForgotPasswordScreen> {
       } catch (e) {
         _changeLoadingVisible();
         print("Forgot Password Error: $e");
-        String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e);
+        String exception = Provider.of<XFirebaseMethod>(context,listen: false).getExceptionText(e);
         Flushbar(
           title: "Forgot Password Error",
           message: exception,

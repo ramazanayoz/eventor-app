@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError, UnknownError }
 
-class XAuthModel extends ChangeNotifier{
+class XFirebaseMethod extends ChangeNotifier{
 
   //VAR
   XApi xapi = XApi("users");

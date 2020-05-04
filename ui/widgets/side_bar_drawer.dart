@@ -100,7 +100,7 @@ class XSideBarDrawer extends StatelessWidget{
               title: new Text("Sign Out"),
               trailing: Icon(Icons.cancel),
               onTap: (){ 
-                Provider.of<XAuthModel>(context).logOutUser(context);
+                Provider.of<XFirebaseMethod>(context).logOutUser(context);
                 Navigator.of(context).pop();
               },             ),
           ],

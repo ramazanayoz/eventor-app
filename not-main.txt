@@ -3,10 +3,10 @@
 import 'package:eventor/denem9-firebaseTum/ui/views/forgot_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'denem9-firebaseTum/ui/theme.dart';
 import 'denem9-firebaseTum/ui/views/sign_in.dart';
 import 'denem9-firebaseTum/ui/views/sign_up.dart';
-import 'denem9-firebaseTum/core/viewsmodels/auth_model.dart';
 import 'denem9-firebaseTum/core/services/state_widget.dart';
 import 'denem9-firebaseTum/ui/views/home.dart';
 import 'denem9-firebaseTum/ui/widgets/bottom_navigation_widget.dart';
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ ChangeNotifierProvider(create: (_) => XAuthModel()) ],
+      providers: [ ChangeNotifierProvider(create: (_) => XFirebaseMethod()) ],
       child:MaterialApp(
         title: 'MyApp Title',
         theme: buildTheme(),

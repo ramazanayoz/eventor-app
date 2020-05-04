@@ -20,9 +20,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _email = new TextEditingController();
   final TextEditingController _password = new TextEditingController();
 
-  XAuthModel xauth = XAuthModel();
+  XFirebaseMethod xauth = XFirebaseMethod();
 
-  bool _autoValidate = true;
+  bool _autoValidate = true;  
   bool _loadingVisible = false;
 
   //FUNCT
@@ -43,7 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
-        await Provider.of<XAuthModel>(context,listen: false).signUp(email, password).then((uID) {
+        await Provider.of<XFirebaseMethod>(context,listen: false).signUp(email, password).then((uID) {
           xauth.addUserSettingsDB(new XUser(
             userId: uID,
             email: email,
@@ -57,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } catch (e) {
           _changeLoadingVisible();
           print("Sign Up Error: $e");
-          String exception = Provider.of<XAuthModel>(context,listen: false).getExceptionText(e); 
+          String exception = Provider.of<XFirebaseMethod>(context,listen: false).getExceptionText(e); 
           Flushbar(
             title: "Sign Up Error",
             message: exception,

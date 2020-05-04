@@ -64,7 +64,7 @@ class _XHomeScreenState extends State<XHomeScreen> {
           ),
           onPressed: () {
            // XStateWidget.of(context).logOutUser();
-            Provider.of<XAuthModel>(context).logOutUser(context); 
+            Provider.of<XFirebaseMethod>(context).logOutUser(context); 
           },
           padding: EdgeInsets.all(12),
           color: Theme.of(context).primaryColor,

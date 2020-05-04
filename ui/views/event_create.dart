@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:eventor/denem9-firebaseTum/core/models/category.dart';
@@ -7,10 +8,12 @@ import 'package:eventor/denem9-firebaseTum/core/models/state.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/user.dart';
 import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/state_widget.dart';
+import 'package:eventor/denem9-firebaseTum/core/services/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 import '../widgets/date_notification_dialog.dart';
 
 class XEventCreate extends StatefulWidget {
@@ -33,6 +36,8 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
   final TextEditingController _briefDescription = new TextEditingController();
   final TextEditingController _description = new TextEditingController();
 
+  bool _autoValidate = false;
+
   bool _status = false;
   final FocusNode myFocusNode = FocusNode();
 
@@ -41,19 +46,19 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd     HH:mm');
   File _image;  
 
-  List<XCategory> _categorieslist = XCategory.getCategories();
-  List<DropdownMenuItem<XCategory>> _dropdownMenuItemslist;
-  XCategory _selectedCategory;
+  List _myCategoryList;
+  String _selectedCategories;
 
-  XAuthModel _authModel = XAuthModel();
+
+  XFirebaseMethod _authModel = XFirebaseMethod();
 
   //FUNCT 
   @override
   void initState() {
     // TODO: implement initState
-    _dropdownMenuItemslist = _buildDropdownMenuItems(_categorieslist);
-    _selectedCategory = _dropdownMenuItemslist[0].value;
+    _myCategoryList = [];
     super.initState();
+    print("see categories ${XCategory.getCatAsStringList()}" );
   }
 
   List<DropdownMenuItem<XCategory>> _buildDropdownMenuItems(List categorieslist){
@@ -79,12 +84,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
       _image = image;
     });
   }
-
-  Future onChangeDropdonItem(XCategory selectedCategory){
-    setState(() {
-      _selectedCategory = selectedCategory;
-    });
-  }
+ 
 
   void _createEvent({String name, String category, String startDate, String endDate, String price, String city, String state, String address, String instructur, String maxParticipant, String briefDescription, String description, BuildContext context }) async{
     try{
@@ -93,34 +93,40 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
 
       String imageUrl;
       String imageLocation;
-      if(_image != null){
-         imageLocation = await _authModel.uploadImage(_image, name);
-         imageUrl = await _authModel.getImageUrl(imageLocation,);
+
+      if(_formKey.currentState.validate()){
+        if(_image != null){
+          imageLocation = await _authModel.uploadImage(_image, name);
+          imageUrl = await _authModel.getImageUrl(imageLocation,);
+        }
+
+        await _authModel.addEventDatabase(new XEvent( 
+            userId: appState.user.userId,  
+            imageLocation: imageLocation,
+            imageUrl: imageUrl,
+            name: name,
+            category: category,
+            startDate: startDate,
+            endDate: endDate,
+            price: price, 
+            instructur : instructur, 
+            maxParticipant : maxParticipant, 
+            briefDescription : briefDescription, 
+            description: description
+        ));
+        
+        await _authModel.addLocationDatabase(new XLocation( 
+          city: city,
+          state: state,
+          address: address,
+        ));
+        Navigator.of(context).pop();  
+
+      }else{
+        setState(() {
+          _autoValidate = true;
+        });
       }
-
-      
-     // print("kasda:" +imageUrl+ " asdasd:"+ imageLocatin);
-
-       await _authModel.addEventDatabase(new XEvent(
-          userId: appState.user.userId,  
-          imageLocation: imageLocation,
-          imageUrl: imageUrl,
-          name: name,
-          category: category,
-          startDate: startDate,
-          endDate: endDate,
-          price: price, 
-          instructur : instructur, 
-          maxParticipant : maxParticipant, 
-          briefDescription : briefDescription, 
-          description: description
-       ));
-       
-       await _authModel.addLocationDatabase(new XLocation( 
-         city: city,
-         state: state,
-         address: address,
-       ));
 
     }catch(e){
         print("Create Event Error: $e");
@@ -155,7 +161,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
         );   
   }    
 
-  Widget createTextInput( String _hintText, TextEditingController _textEditingController ){
+  Widget createTextInput( String _hintText, TextEditingController _textEditingController, Function validator ){
         return Padding(
           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
           child: new Row(
@@ -165,6 +171,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
                 child: new TextFormField(
                   textCapitalization: TextCapitalization.words,
                   controller: _textEditingController,
+                  validator: validator,
                   decoration: InputDecoration(
                     hintText: _hintText ,
                   ),
@@ -177,7 +184,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
         );
   } 
   
- Widget createDescriptionInput( {String hintText, TextEditingController textEditingController, int maxlines} ){
+ Widget createDescriptionInput( {String hintText, TextEditingController textEditingController, int maxlines, Function validator} ){
         return Padding(
           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
           child: new Row(
@@ -189,6 +196,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
                   controller: textEditingController,
                   keyboardType: TextInputType.multiline,
                   maxLines: maxlines,
+                  validator: validator,
                   decoration: InputDecoration(
                     hintText: hintText ,
                     border: OutlineInputBorder(
@@ -228,9 +236,9 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
                 textColor: Colors.white,
                 color: Colors.green,
                 onPressed: () {
-                  _createEvent(
+                  _createEvent( 
                     name: _name.text,
-                    category: _selectedCategory.name,
+                    category: _selectedCategories, 
                     startDate: _dateFormat.format(_selectedStartDate),
                     endDate: _dateFormat.format(_selectedEndDate),
                     price: _price.text,
@@ -243,7 +251,6 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
                     description: _description.text,
                     context: context,
                   );
-                  Navigator.of(context).pop();
                   setState(() {
                     _status = false;
                     FocusScope.of(context).requestFocus(new FocusNode());
@@ -401,25 +408,50 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Event Name"),
-        createTextInput("Name...", _name),
+        createTextInput("Name...", _name, Validator.validateEventName),
       ]
     );    
   }
 
   Widget categoryWid(){
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        createTitleInput("Select a category"),
-        Container(
-          margin: EdgeInsets.only(left: 28),
-          child: DropdownButton(
-            value: _selectedCategory,
-            items: _dropdownMenuItemslist, 
-            onChanged: onChangeDropdonItem,
+        createTitleInput("Start Date and Time"),
+        new Padding(
+          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
+          child: new Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              new Flexible(
+                child: MultiSelectFormField(
+                  autovalidate: false,
+                  titleText: 'Categories',
+                  validator: (value){
+                    if(value ==null || value.length ==0){
+                      return 'Please select one or more options';
+                    }
+                  },
+                  dataSource: XCategory.getCatAsStringList(),
+                  textField: 'display',
+                  valueField: 'value',
+                  okButtonLabel: 'OK',
+                  cancelButtonLabel: 'CANCEL',
+                  hintText: 'Please choose one or more',
+                  value: _myCategoryList,
+                    onSaved: (value) {
+                          if (value == null) return;
+                          setState(() {
+                            _myCategoryList = value;
+                            this._selectedCategories = json.encode(value);
+                            print( "_selectedCategories ${_selectedCategories}");
+                          });
+                    },
+                ),
+              ),
+            ],
           ),
         ),
-      ],
+      ]
     );
   }
 
@@ -510,7 +542,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Price"),
-        createTextInput("Price...", _price),
+        createTextInput("Price...", _price, Validator.validatePrice),
       ]
     ); 
   }
@@ -519,7 +551,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("City"),
-        createTextInput("City...", _city),
+        createTextInput("City...", _city, Validator.validateCity ),
       ]
     );    
   }
@@ -528,7 +560,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(    
       children: <Widget>[
         createTitleInput("State"),
-        createTextInput("State...", _state),
+        createTextInput("State...", _state,  Validator.validateState),
       ]
     );          
   }
@@ -537,7 +569,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Address"),
-        createTextInput("Address...", _address ),
+        createTextInput("Address...", _address,  Validator.validateAddress),
       ]
     );           
   }
@@ -546,7 +578,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(       
        children: <Widget>[
         createTitleInput("Insctructur"),
-        createTextInput("Insctructur...", _instructur),
+        createTextInput("Insctructur...", _instructur, Validator.validateName),
       ]
     );  
   }
@@ -555,7 +587,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Max Participant"),
-        createTextInput("Max Participant...", _maxParticipent),
+        createTextInput("Max Participant...", _maxParticipent, Validator.validateMaxParticipant),
       ]
     );          
   }
@@ -564,7 +596,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Brief Description"),
-        createDescriptionInput(hintText:"Brief Description...", textEditingController: _briefDescription, maxlines:3 ),
+        createDescriptionInput(hintText:"Brief Description...", textEditingController: _briefDescription, maxlines:3, validator: Validator.validateBriefDescription),
       ]
     );    
   }
@@ -574,7 +606,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
     return Column(
       children: <Widget>[
         createTitleInput("Description"),
-        createDescriptionInput(hintText:"Description...",  textEditingController: _description, maxlines:9),
+        createDescriptionInput(hintText:"Description...",  textEditingController: _description, maxlines:9, validator: Validator.validateDescription),
       ]
     );
   }
@@ -602,6 +634,7 @@ class _XEventCreateState extends State<XEventCreate> with SingleTickerProviderSt
                 color: Color(0xffFFFFFF),
                 child: Form(
                   key: _formKey,
+                  autovalidate: _autoValidate,
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 25.0),
                     child: new Column(
