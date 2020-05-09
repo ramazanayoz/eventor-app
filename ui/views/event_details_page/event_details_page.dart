@@ -1,4 +1,3 @@
-
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_detail_background.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_details_content.dart';
@@ -27,4 +26,4 @@ class XEventDetailsPage extends StatelessWidget {
       )
     );
   }
-}
+} 

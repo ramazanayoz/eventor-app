@@ -11,9 +11,11 @@ class XEventWidget extends StatelessWidget {
   final XEvent xevent;
   //CONSTRUCTUR
   const XEventWidget({Key key, this.xevent}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
+    print("renderend event widget");
+    print("${xevent.title} event showing on listView ");
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 20),
       elevation: 4,
@@ -42,7 +44,7 @@ class XEventWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         new Text(
-                          xevent.name,
+                          xevent.title,
                           style: eventTitleTextStyle,
                         ),
                         SizedBox(height: 10,),
@@ -51,7 +53,7 @@ class XEventWidget extends StatelessWidget {
                             children: <Widget>[
                               new Icon(Icons.location_on),
                               new SizedBox(width: 5,),
-                              new Text(xevent.name, style: eventLocationTextStyle),
+                              new Text(xevent.title, style: eventLocationTextStyle),
                             ],
                           ),
                         ),

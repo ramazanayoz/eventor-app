@@ -1,11 +1,12 @@
+import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_details_page.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/category_widget.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/event_widget.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/category.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/app_state.dart';
 import 'package:eventor/denem9-firebaseTum/ui/styleguide.dart';
-import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_details_page.dart';
-import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/category_widget.dart';
-import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/event_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,7 @@ class XEventScreen extends StatelessWidget {
                       child: Row(
                         children: <Widget>[
                           new Text(
-                            'LOCAL EVENTS',
+                            'EVENTS',
                             style: fadedTextStyle,
                           ),
                           new Spacer(),
@@ -50,13 +51,13 @@ class XEventScreen extends StatelessWidget {
                     ),
                     new Padding(
                       padding: const EdgeInsets.symmetric(vertical:  24.0),
-                      child: Consumer<XAppState>( //notif edilince bu kısım yeniden renderlenir
+                      child: Consumer<XAppState>( //category değişiminde notif edilince bu kısım yeniden renderlenir
                         builder: (context, xappState, widget) => SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: <Widget>[
                               for(final _category in listcategories)
-                                XCategoryWidget(category: _category)  
+                                XCategoryWidget(category: _category)     
                                 //kategoriler tek tek children içine oluşturulur
                             ],
                           ),
@@ -73,12 +74,15 @@ class XEventScreen extends StatelessWidget {
                                 if(snapshot.hasData){
                                   listevents = snapshot.data.documents
                                     .map((doc) => XEvent.mapJsonConvertToClassObj(doc.data)).toList();
+                                    print("${xappState.selectedCategoryName}");
                                 }
                                   return Column(
                                     children: <Widget>[
-                                        for(final _event in listevents.where( (e) =>
+                                     
+                                        for(final _event in listevents.where( (e) => 
                                           xappState.selectedCategoryName.contains("All") ?  true
-                                          : e.category.contains(xappState.selectedCategoryName) ) )
+                                          : e.category.toLowerCase().contains(xappState.selectedCategoryName.toUpperCase()) ) )
+                                          //for ile tekrar tekrar oluşturulur
                                             GestureDetector(
                                               onTap: () {
                                                 Navigator.of(context).push(
@@ -86,8 +90,8 @@ class XEventScreen extends StatelessWidget {
                                                       builder: (context) => XEventDetailsPage(xevent: _event),
                                                   )
                                                 ); 
-                                              },
-                                              child: XEventWidget(xevent: _event),
+                                              }, 
+                                              child: XEventWidget(xevent: _event),  
                                             ),
                                       
                                     ],

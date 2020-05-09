@@ -2,12 +2,13 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 XEvent stringjsonConvertToClassobj(String str) {
   final jsonData = json.decode(str);
   print("userFromJson json.decode(str) ${json.decode(str)}");
   return XEvent.mapJsonConvertToClassObj(jsonData);
-}
+} 
 
 String classObjConvertToJsonString(XEvent data) {
   final dyn = data.classObjConvertToJson();
@@ -20,7 +21,7 @@ class XEvent{
   String userId;
   String imageLocation;
   String imageUrl;
-  String name;
+  String title;
   String category;
   String startDate;
   String endDate;
@@ -36,7 +37,7 @@ class XEvent{
     this.userId,
     this.imageLocation,
     this.imageUrl,
-    this.name,
+    this.title,
     this.category,
     this.startDate,
     this.endDate,
@@ -48,11 +49,14 @@ class XEvent{
     this.eventId,
   });
 
+  
+
+  //METHODS
   factory XEvent.mapJsonConvertToClassObj(Map<String, dynamic> json) => new XEvent(
         userId: json["userId"],
         imageLocation: json["imageLocation"],
         imageUrl: json["imageUrl"],
-        name: json["name"],
+        title: json["title"],
         category: json["category"],
         startDate: json["startDate"],
         endDate: json["endDate"],
@@ -67,7 +71,7 @@ class XEvent{
         "userId": userId,
         "imageLocation" : imageLocation,
         "imageUrl": imageUrl, 
-        "name": name,
+        "title": title,
         "category": category,
         "startDate": startDate,
         "endDate": endDate,

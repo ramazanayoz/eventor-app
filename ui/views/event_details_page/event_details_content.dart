@@ -1,4 +1,3 @@
-
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/deneme17-event-ui/model/guest.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class XEventDetailsContent extends StatelessWidget {
           new Padding(
             padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.2),
             child: Text(
-              _event.name,
+              _event.title,
               style: eventWhiteTitleTextStyle,
             ),
           ),
@@ -48,7 +47,7 @@ class XEventDetailsContent extends StatelessWidget {
                   new Icon(Icons.location_on, color: Colors.white, size: 15),
                   new SizedBox(width: 5,),
                   new Text(
-                    _event.name,
+                    _event.title,
                     style: eventLocationTextStyle.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -88,8 +87,8 @@ class XEventDetailsContent extends StatelessWidget {
             child: RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(text: _event.name, style: punchLine1TextStyle),
-                  TextSpan(text: _event.name, style: punchLine2TextStyle),
+                  TextSpan(text: _event.title, style: punchLine1TextStyle),
+                  TextSpan(text: _event.title, style: punchLine2TextStyle),
                 ]
               ),
             ),

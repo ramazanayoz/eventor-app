@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
   //constructur initiliza
   XAppState(){
      selectedCategoryName = selectedCategoryName ?? 'All' ;
-  }
+  }  
 
   //FUNCT
   void updateCategoryId(String selectedCategoryName) {

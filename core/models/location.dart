@@ -2,15 +2,25 @@
 class XLocation {
 
   //VAR
-  String city;
+  String country;
   String state;
+  String city;
+  String sublocality;
+  String thoroughfare;
+  String subThoroughfare;
+  String postalCode;
   String address;
   String eventId;
 
   //CONST
   XLocation({
-    this.city,
+    this.country,
     this.state,
+    this.city,
+    this.sublocality,
+    this.thoroughfare,
+    this.subThoroughfare,
+    this.postalCode,
     this.address,
     this.eventId,
   });
@@ -18,8 +28,13 @@ class XLocation {
 
   Map<String, dynamic> classObjConvertToJson() =>{
     "eventId" : eventId,
-    "city" : city,
+    "country" : country,
     "state" : state,
+    "city" : city,
+    "sublocality" : sublocality,
+    "thoroughfare" : thoroughfare,
+    "subThoroughfare" : subThoroughfare,
+    "postalCode" : postalCode,
     "address" : address,
   };
 

@@ -54,7 +54,7 @@ class XFirebaseMethod extends ChangeNotifier{
   Future<void> forgotPasswordEmail(String email) => xapi.sendPassword(email);
 
 
-  //FUNCT
+  //FOR EVENT
   Future<void> addEventDatabase(XEvent xevent) =>  _eventApi.addEventToDatabase(xevent);
 
   Future<void> addLocationDatabase(XLocation xlocation) => _eventApi.addLocationToDatabase(xlocation);
