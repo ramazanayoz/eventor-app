@@ -79,11 +79,10 @@ class XEventScreen extends StatelessWidget {
                                   return Column(
                                     children: <Widget>[
                                      
-                                        for(final _event in listevents.where( (e) => 
+                                        for(final _event in listevents.where( (e) =>
                                           xappState.selectedCategoryName.contains("All") ?  true
-                                          : e.category.toLowerCase().contains(xappState.selectedCategoryName.toUpperCase()) ) )
-                                          //for ile tekrar tekrar oluşturulur
-                                            GestureDetector(
+                                          : e.category.contains(xappState.selectedCategoryName) ) )
+                                            GestureDetector(     //for ile tekrar tekrar oluşturulur
                                               onTap: () {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(

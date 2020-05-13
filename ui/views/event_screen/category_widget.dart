@@ -14,7 +14,7 @@ class XCategoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     
     //VAR
-    final _appState = Provider.of<XAppState>(context);
+    final _appState = Provider.of<XAppState>(context); 
     final _isSelected = _appState.selectedCategoryName == category.name; //PROVİDER SAYESİNDE BU KISIM DEĞİŞİNCE BUNA BAĞLI VERİABLE LARDA DEĞİŞİR VE PROĞRAM YENİ DEĞER GÖSTERİR
     print("selected category id: ${_appState.selectedCategoryName}");
     print("created category object, ${category.name}");

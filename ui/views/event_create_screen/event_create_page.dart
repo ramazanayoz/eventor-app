@@ -29,7 +29,10 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
   int _currentStep = 0;
   bool _complete = false;
   XEventFormProv _eventFormProv;
-  
+ 
+  bool _isAutoValidateS1 = false;
+  bool _isAutoValidateS2 = false;
+  bool _isAutoValidateS3 = false;
 
   String imageUrl;
   String imageLocation;
@@ -74,11 +77,14 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
     if(step == 0){
       try{
         print("step0 input working");
-        setState(()=>_step1State = StepState.error);
+        setState(()=>_step1State = StepState.error); 
+        setState(() => _isAutoValidateS1 = true );
         if(Validator.validateEventName(_eventFormProv.title.trim()) != null) {return false;}
         print("category....... ${_eventFormProv.category}");
         if(_eventFormProv.category ==  null || _eventFormProv.category == "[]" ) {return false;}
         setState(()=>_step1State = StepState.complete);
+        setState(() => _isAutoValidateS1 = false );
+
         return true;
       }catch(e){ return false;}
     }
@@ -86,22 +92,26 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
       try{
         print("step1 input working");
         setState(()=>_step2State = StepState.error);
+        setState(() => _isAutoValidateS2 = true );
         if(Validator.validateMaxParticipant(_eventFormProv.maxParticipant.trim()) !=null) {return false;}
         if(Validator.validatePrice(_eventFormProv.price.trim()) !=null) {return false;}
         if(Validator.validateBriefDescription(_eventFormProv.briefDescription.trim()) !=null) {return false;}
         if(Validator.validateDescription(_eventFormProv.description.trim()) !=null) {return false;}
         setState(()=>_step2State = StepState.complete);
+        setState(() => _isAutoValidateS2 = false );
         return true;
       }catch(e){return false;}
     }
     if(step==2){
       try{
         print("step2 input working");
+        setState(() => _isAutoValidateS3 = true );
         setState(()=>_step3State = StepState.error);
         if(Validator.validateCity(_eventFormProv.city.trim()) !=null) {return false;}
         if(Validator.validateState(_eventFormProv.state.trim()) !=null) {return false;}
         if(Validator.validateAddress(_eventFormProv.address.trim()) !=null) {return false;}
         setState(()=>_step3State = StepState.complete);
+        setState(() => _isAutoValidateS3 = false );
         return true;
       }catch(e){return false;}
     }
@@ -167,7 +177,7 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
           title: const Text('Create Event'),
           isActive: _currentStep == 0 ? true : false,
           state: _step1State,
-          content: XFirstStep()
+          content: XFirstStep(isAutoValidate:_isAutoValidateS1),
         ),
         Step(
           title: const Text('Description'),
@@ -175,18 +185,18 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
           state: _step2State,
           content: Column(  ///-----------
             children: <Widget>[
-              XSecondStep(),
+              XSecondStep(isAutoValidate:_isAutoValidateS2),
             ],
           ),
         ),
         Step(
           title: const Text('Location'),
-          subtitle: const Text('Error!'),
+          subtitle: const Text('Last'),
           isActive: _currentStep == 2 ? true : false,
           state: _step3State,
           content: Column(   ///-----------
             children: <Widget>[
-              XThirdStep(),
+              XThirdStep(isAutoValidate:_isAutoValidateS3), 
             ],
           )
         )
@@ -272,11 +282,13 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
                         onStepTapped: (step) => goTo(step),
                         controlsBuilder: (BuildContext context, {VoidCallback onStepContinue, VoidCallback onStepCancel}){
                           return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               SizedBox(height: 70.0,),
                               Container(
-                                color: Colors.blue,
+                                color: Colors.purple,
                                 child: FlatButton(
+                                  shape: StadiumBorder(),
                                   child: Text(
                                     "Next",
                                     style: TextStyle(color: Colors.white),
@@ -309,9 +321,11 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
                                   },
                                 ),
                               ),
+                              SizedBox(width: 50,),
                               Container(
-                                color: Colors.blue,
+                                color: Colors.purple,
                                 child: FlatButton(
+                                  shape: StadiumBorder(),
                                   child: Text(
                                     "Back",
                                     style: TextStyle(color: Colors.white),

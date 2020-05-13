@@ -8,6 +8,9 @@ import 'package:provider/provider.dart';
 
 class XSecondStep extends StatelessWidget {
 
+  final bool isAutoValidate;
+   XSecondStep({ this.isAutoValidate});
+
   //VAR
   final TextEditingController _instructur = new TextEditingController();
   final TextEditingController _maxParticipent = new TextEditingController();
@@ -78,7 +81,7 @@ class XSecondStep extends StatelessWidget {
               child: new TextFormField(
                 textCapitalization: TextCapitalization.words,
                 controller: _textEditingController,
-                autovalidate: true,
+                autovalidate: isAutoValidate,
                 validator: validator,
                 onChanged: (val){
                   refresInputs();
@@ -111,7 +114,7 @@ class XSecondStep extends StatelessWidget {
                 onChanged: (val){
                   refresInputs();
                 },
-                autovalidate: true,
+                autovalidate: isAutoValidate,
                 validator: validator,
                 decoration: InputDecoration(
                   hintText: hintText ,

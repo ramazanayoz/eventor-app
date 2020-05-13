@@ -1,16 +1,21 @@
 
   
+import 'package:eventor/denem9-firebaseTum/core/services/eventForm_provider.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/forgot_password.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'denem9-firebaseTum/core/models/event.dart';
 import 'denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'denem9-firebaseTum/ui/theme.dart';
+import 'denem9-firebaseTum/ui/views/event_create_screen/event_create_page.dart';
 import 'denem9-firebaseTum/ui/views/sign_in.dart';
 import 'denem9-firebaseTum/ui/views/sign_up.dart';
 import 'denem9-firebaseTum/core/services/state_widget.dart';
 import 'denem9-firebaseTum/ui/views/home.dart';
 import 'denem9-firebaseTum/ui/widgets/bottom_navigation_widget.dart';
-import 'denem9-firebaseTum/ui/views/event_create.dart';
+import 'deneme18-getLocation/HomePage.dart';
+import 'deneme19-stepperWidget/account_page.dart';
+import 'deneme21-ui-event/pages/home_page.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -20,7 +25,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ ChangeNotifierProvider(create: (_) => XFirebaseMethod()) ],
+      providers: [
+        ChangeNotifierProvider(create: (_) => XFirebaseMethod()),  
+        ChangeNotifierProvider(create: (_) => XEventFormProv()),
+      ],
       child:MaterialApp(
         title: 'MyApp Title',
         theme: buildTheme(),
@@ -28,10 +36,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => XBottomNavigationWidget(),
+        //  '/': (context) => XMyHomePage(),
           '/signin': (context) => SignInScreen(),
           '/signup': (context) => SignUpScreen(),
           '/forgot-password': (context) => XForgotPasswordScreen(),
-          '/event-create' : (context) => XEventCreate(),
+          '/event-create' : (context) => XEventCreatePage(),
         },
       ),
     );
@@ -44,5 +53,3 @@ void main() {
   );
   runApp(stateWidget);
 }
-
- 

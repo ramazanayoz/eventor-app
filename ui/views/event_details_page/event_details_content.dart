@@ -1,6 +1,10 @@
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/deneme17-event-ui/model/guest.dart';
+import 'package:eventor/deneme21-ui-event/constant/color.dart';
+import 'package:eventor/deneme21-ui-event/constant/text_style.dart';
+import 'package:eventor/deneme21-ui-event/utils/datetime_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../styleguide.dart';
@@ -8,126 +12,218 @@ import '../../styleguide.dart';
 
 class XEventDetailsContent extends StatelessWidget {
   
+  XEvent _event;
+  DateTime  _eventStartDate; 
+  DateTime _eventdEndDate ;
+  bool _isReadMActive = false;
+  String _firstCharOrganizator = "";
+  int _differenceDay;
+  int _differenceHour;
   
+
   @override
   Widget build(BuildContext context) {
     
     //VAR
     final _event = Provider.of<XEvent>(context);
     final _screenWidth = MediaQuery.of(context).size.width;
+    double headerImageSize = 0;
 
-    //DESİGNS
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final DateFormat _dateFormat = DateFormat('HH:mm');
+
+    //string to DateTime
+    try{ _eventStartDate = DateFormat('yyyy-MM-dd HH:mm').parse(_event.startDate); }catch(e){ print(e); };  
+    try{ _eventdEndDate = DateFormat('yyyy-MM-dd HH:mm').parse(_event.endDate); }catch(e){ print(e); }; 
+
+    try{ _differenceDay = _eventStartDate.difference(_eventdEndDate).inDays;} catch(er){_differenceDay = 0;};
+    try{ _differenceHour = _differenceDay %24  ; }catch(er){_differenceHour = 0;};
+
+
+    //get first char organizator
+    try{ _firstCharOrganizator = _event.instructur[0]; }catch(er){ _firstCharOrganizator = "";};
+    
+    Widget buildHeaderImage(){
+      headerImageSize = MediaQuery.of(context).size.height / 2.5;
+      return Stack(
         children: <Widget>[
-          new SizedBox(
-            height: 100,
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: headerImageSize,
+            child: Hero(
+              tag:_event.title,
+              child: ClipRRect(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
+                child: Image.network(
+                  _event.imageUrl,
+                  fit:BoxFit.cover,
+                ),
+              ),
+            )
           ),
-          new Padding(
-            padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.2),
-            child: Text(
-              _event.title,
-              style: eventWhiteTitleTextStyle,
-            ),
-          ),
-          new SizedBox(height: 10,),
-          new Padding(
-            padding: EdgeInsets.symmetric(horizontal: _screenWidth * 0.24),
-            child: FittedBox(
-              child: Row(
+         // buildHeaderButton(),
+        ],
+      );
+    }
+
+
+    Widget buildEventTitle(){
+      return Container(
+        child: Text(
+          _event.title,
+          style: headerStyle.copyWith(fontSize: 32),
+        ),
+      );
+    }
+
+  
+    Widget buildEventDate(){
+      return Container(
+        child: Row(
+          children: <Widget>[
+            new Container(
+              decoration: BoxDecoration(
+                color: primaryLight,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  new Text(
-                    "-", 
-                    style: eventLocationTextStyle.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    )
-                  ),
-                  new Icon(Icons.location_on, color: Colors.white, size: 15),
-                  new SizedBox(width: 5,),
-                  new Text(
-                    _event.title,
-                    style: eventLocationTextStyle.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  )
+                  Text("${DateTimeUtils.getMounth(_eventStartDate)}", style: monthStyle,), 
+                  Text("${DateTimeUtils.getDayOfMounth(_eventStartDate)}", style: titleStyle,), 
                 ],
               ),
             ),
-          ),
-          new SizedBox(
-            height: 10,
-          ),
-          new Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Text("GUESTS", style: guestTextStyle,),
-          ),
-          new SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
+            SizedBox(width: 12),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                for(final _guest in guestlist) Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ClipOval(
-                    child: Image.asset(
-                        _guest.imagePath,
-                        width: 90,
-                        height: 90,
-                        fit: BoxFit.cover,
-                    ),
-                  ),
-                )
+                Text(DateTimeUtils.getDayOfWeek(_eventStartDate), style: titleStyle), 
+                SizedBox(height: 4),
+                Text("Starting time: ${_dateFormat.format(_eventStartDate)} ", style: subtitleStyle,),
+                Text("Long: ${_differenceDay} day, ${_differenceHour} hour   ", style: subtitleStyle,),
               ],
-            )
-          ),
-          new Padding(
-            padding: const EdgeInsets.all(16),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: _event.title, style: punchLine1TextStyle),
-                  TextSpan(text: _event.title, style: punchLine2TextStyle),
-                ]
-              ),
             ),
-          ),
-          if(_event.description.isNotEmpty) new Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(_event.description, style: eventLocationTextStyle,),
-          ),
-          /*
-          if (_event.galleryImagesList.isNotEmpty) new Padding(
-            padding: const EdgeInsets.only(left: 16.0, top: 16, bottom: 16),
-            child: Text(
-              "GALLERY",
-              style: guestTextStyle,
-            ),
-          ),
-          new SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: <Widget>[
-                for(final _galleryImagePath in _event.galleryImagesList)
-                  Container(
-                    margin: const EdgeInsets.only(left: 16, right: 16, bottom: 32),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      child: Image.asset(
-                        _galleryImagePath,
-                        width: 180,
-                        height: 180,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+            Spacer(),
+            Container(
+              padding: const EdgeInsets.all(2),
+              decoration: ShapeDecoration(shape: StadiumBorder(), color: primaryLight),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 8,),
+                  Text("Add To Calandar", style: subtitleStyle.copyWith(color: Theme.of(context).primaryColor)),
+                  FloatingActionButton(
+                    mini: true,
+                    onPressed: (){},
+                    child: Icon(Icons.add),
                   )
+                ],
+              ),
+            )  
+          ],
+        ),
+      );
+    }
+
+
+
+    Widget buildAboutEvent() {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text("About", style: headerStyle,),
+              SizedBox(height: 0,),
+              Text(
+                _isReadMActive ? _event.description  //read more active değilse ilk 5 karakretri alır
+                  :  _event.description.substring(0, 55 ), 
+                style: subtitleStyle,
+              ),
+              SizedBox(height: 8,),
+              InkWell(
+                child: Text(
+                  _isReadMActive ? "": "Read more..."   ,
+                  style: TextStyle(color: Theme.of(context).primaryColor, decoration: TextDecoration.underline),
+                ),
+                onTap: (){
+                  setState(() => _isReadMActive = true );
+                },
+              )
+            ],
+          );
+        }
+      );
+    }
+
+    buildOrganizeInfo(){
+      return Row(
+        children: <Widget>[
+          CircleAvatar(
+            child: Text(_firstCharOrganizator),
+          ),
+          SizedBox(height: 16,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(_event.instructur, style:titleStyle),
+              SizedBox(height: 4,),
+              Text("Instructor", style: subtitleStyle),
+            ],
+          ),
+          Spacer(),
+          FlatButton(
+            child: Text("Follow", style: TextStyle(color: Theme.of(context).primaryColor),),
+            onPressed: (){},
+            shape: StadiumBorder(),
+            color:primaryLight,
+          )
+        ],
+      );
+    }
+
+    //DESİGNS
+    return  SingleChildScrollView(
+      //controller: controller
+      child:Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          buildHeaderImage(),
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                buildEventTitle(),
+                SizedBox(height: 16,),
+                buildEventDate(),
+                SizedBox(height: 24,),
+                buildAboutEvent(),
+                SizedBox(height: 24,),
+                buildOrganizeInfo(),
+                SizedBox(height: 24,),
+                //buildEventLocation(),
+                SizedBox(height: 124,),
               ],
             ),
           )
-          */
         ],
       )
     );
+
+
+
+
+
+    
+    
+    
   }
+
+
+
+
+
+
 }

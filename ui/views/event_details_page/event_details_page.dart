@@ -1,6 +1,8 @@
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_detail_background.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_details_content.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_header_bar.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_price_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,11 +21,15 @@ class XEventDetailsPage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[ 
-            XEventDetailsBackground(),
             XEventDetailsContent(),
+            XPriceBottomBar(),
+            XHeaderBar(),
           ]
         ),
       )
     );
   }
 } 
+
+            //XEventDetailsBackground(),
+            //XEventDetailsContent(),

@@ -1,12 +1,15 @@
 
 import 'package:eventor/denem9-firebaseTum/core/services/eventForm_provider.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/validator.dart';
+import 'package:eventor/deneme21-ui-event/constant/color.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class XThirdStep extends StatelessWidget {
 
+  final bool isAutoValidate;
+  XThirdStep({ this.isAutoValidate});
 
   //VAR
   final TextEditingController _country = new TextEditingController();
@@ -129,7 +132,7 @@ class XThirdStep extends StatelessWidget {
                 textCapitalization: TextCapitalization.words,
                 controller: _textEditingController,
                 validator: validator,
-                autovalidate: true,
+                autovalidate: isAutoValidate,
                 onChanged: (val){
                   refreshProvVariables();
                 },
@@ -188,20 +191,20 @@ class XThirdStep extends StatelessWidget {
 
     Widget getAddressButton(){
       return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        
         children: <Widget>[
-          SizedBox(height: 70.0,),
-          Container(
-            color: Colors.blue,
-            child: FlatButton(
+            FlatButton(
+              color: primaryLight,
+              shape: StadiumBorder(),
               child: Text(
                 "Get address from gps",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Theme.of(context).primaryColor),
               ), 
               onPressed: ()  {
-                 _getCurrentLocation();
-                 refreshProvVariables();
+                  _getCurrentLocation();
+                  refreshProvVariables();
               },
-            )
           )
         ]
       );

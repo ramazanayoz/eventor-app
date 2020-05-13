@@ -12,6 +12,10 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 
 class XFirstStep extends StatefulWidget {
+
+  final bool isAutoValidate;
+  const XFirstStep({ Key key, this.isAutoValidate}): super(key: key);
+
   @override
   _XFirstStepState createState() => _XFirstStepState();
 }
@@ -190,7 +194,7 @@ class _XFirstStepState extends State<XFirstStep> {
             child: new TextFormField(
               textCapitalization: TextCapitalization.words,
               controller: _textEditingController,
-              autovalidate: true,
+              autovalidate: widget.isAutoValidate,
               validator: validator,
               decoration: InputDecoration(
                 hintText: _hintText ,
@@ -237,7 +241,7 @@ class _XFirstStepState extends State<XFirstStep> {
                 child:StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState){
                     return MultiSelectFormField(
-                      autovalidate: true,
+                      autovalidate:  widget.isAutoValidate,
                       titleText: "",
                       validator: (value){
                         value =  value ?? _eventFormProv.myCategoryList;
