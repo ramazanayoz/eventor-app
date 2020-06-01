@@ -61,6 +61,14 @@ class XSideBarDrawer extends StatelessWidget{
               },           
             ),
             new ListTile(
+              title: Text("Edit Profile"),
+              trailing: Icon(Icons.edit, color: Colors.blueAccent),
+              onTap: (){ 
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/edit-profile');
+              },            
+            ),
+            new ListTile(
               title: Text("Bookings"),
               trailing: Icon(Icons.book, color: Colors.blueAccent),
               onTap: (){ 

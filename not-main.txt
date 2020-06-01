@@ -1,5 +1,6 @@
 
   
+import 'package:eventor/denem9-firebaseTum/core/services/editProfile_provider.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/eventForm_provider.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/forgot_password.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'denem9-firebaseTum/core/models/event.dart';
 import 'denem9-firebaseTum/core/resources/firebase_methods.dart';
 import 'denem9-firebaseTum/ui/theme.dart';
+import 'denem9-firebaseTum/ui/views/edit_profile_screen.dart';
 import 'denem9-firebaseTum/ui/views/event_create_screen/event_create_page.dart';
 import 'denem9-firebaseTum/ui/views/sign_in.dart';
 import 'denem9-firebaseTum/ui/views/sign_up.dart';
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => XFirebaseMethod()),  
         ChangeNotifierProvider(create: (_) => XEventFormProv()),
+        ChangeNotifierProvider(create: (_) => XEditProfileProvider()),
       ],
       child:MaterialApp(
         title: 'MyApp Title',
@@ -41,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/signup': (context) => SignUpScreen(),
           '/forgot-password': (context) => XForgotPasswordScreen(),
           '/event-create' : (context) => XEventCreatePage(),
+          '/edit-profile' : (context) => XEditProfileScreen(context: context,),
         },
       ),
     );

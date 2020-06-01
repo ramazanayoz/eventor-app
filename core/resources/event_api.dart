@@ -36,6 +36,7 @@ class XEventApi{
 
 
 
+
   Future<String> uploadImage(File image,String name) async{
     try {
       //make random image name.
@@ -47,6 +48,7 @@ class XEventApi{
       await uploadTask.onComplete;
      // _addPathToDatabase(imageLocation);
       return imageLocation; 
+      
 
     }catch(e){
       print(e.message);
@@ -65,6 +67,6 @@ class XEventApi{
       print(e.message);
     }
   }
-
+ 
 
 }

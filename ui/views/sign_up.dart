@@ -43,7 +43,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
-        await Provider.of<XFirebaseMethod>(context,listen: false).signUp(email, password).then((uID) {
+        String displayName= "$firstName.$lastName";
+        await Provider.of<XFirebaseMethod>(context,listen: false).signUp(displayName ,email, password).then((uID) { 
           xauth.addUserSettingsDB(new XUser(
             userId: uID,
             email: email,

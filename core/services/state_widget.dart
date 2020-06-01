@@ -36,6 +36,7 @@ class _XStateWidgetState extends State<XStateWidget> {
 
   @override
   void initState() {
+    print("state_widget working");
     super.initState();
     //print('not:XStateWidget da...initState... working');
     if (widget.state != null) {

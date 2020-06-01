@@ -21,12 +21,18 @@ class XUser {
   String firstName;
   String lastName;
   String email;
+  String phoneNumber;
+  String imageUrl;
+  String imageLoc;
 
   XUser({   //constructur
     this.userId,
     this.firstName,
     this.lastName,
     this.email,
+    this.phoneNumber,
+    this.imageUrl,
+    this.imageLoc,
   });
 
   factory XUser.mapJsonConvertToClassObj(Map<String, dynamic> json) => new XUser(
@@ -34,6 +40,9 @@ class XUser {
         firstName: json["firstName"],
         lastName: json["lastName"],
         email: json["email"],
+        phoneNumber: json["phoneNumber"],
+        imageUrl: json["imageUrl"],
+        imageLoc: json["imageLoc"],
       );  //  XUser nesnesi oluşturuluyor firebaseden alınan parametrelerle
 
   Map<String, dynamic> classObjConvertToJson() => { //user bilgileri json yani map formate çevriliyor
@@ -41,6 +50,9 @@ class XUser {
         "firstName": firstName,
         "lastName": lastName,
         "email": email,
+        "phoneNumber": phoneNumber,
+        "imageUrl": imageUrl,
+        "imageLoc": imageLoc,
       };
 
   factory XUser.docConvertToClassObj(DocumentSnapshot doc) {

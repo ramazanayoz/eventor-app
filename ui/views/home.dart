@@ -1,4 +1,5 @@
 import 'package:eventor/denem9-firebaseTum/core/resources/firebase_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/models/state.dart';
@@ -13,7 +14,7 @@ class XHomeScreen extends StatefulWidget {
 
 class _XHomeScreenState extends State<XHomeScreen> {
   //VAR
-  XStateModel appState;
+  XStateModel appState; 
   bool _loadingVisible = false;
   @override
   void initState() {
@@ -25,7 +26,9 @@ class _XHomeScreenState extends State<XHomeScreen> {
   //DESİGN
   Widget build(BuildContext context) {
 
-    appState = XStateWidget.of(context).state; 
+
+
+    appState = XStateWidget.of(context).state;  
 
       //database bilgileri alınıyor state classından 
       final userId = appState?.firebaseUserAuth?.uid ?? ''; 

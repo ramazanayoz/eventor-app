@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/state_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/settings.dart';
 import '../models/user.dart';
@@ -17,9 +21,12 @@ class XApi{
   }
 
   //FUNCT
-  Future<String> createUser(email,password) async {
-  AuthResult user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-    return user.user.uid ;
+  Future<String> createUser(displayName, email, password) async {
+  AuthResult user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password); 
+  UserUpdateInfo userInfo =  UserUpdateInfo();
+  userInfo.displayName= displayName;
+  user.user.updateProfile(userInfo);
+    return user.user.uid;
   } 
 
   Future<String> signIn(email,password, context) async {
@@ -75,10 +82,10 @@ class XApi{
   Future<void> addToDatabaseUser(XUser xuser) async {
     checkingUser(xuser.userId).then((userId) async {
        if(!userId) {
+                     print("burararsı");
         await Firestore.instance
             .document("users/${xuser.userId}")
             .setData(xuser.classObjConvertToJson());//alınan bilgiler json yani map formata çevrilir database eklemek için
-
             addToDatabaseSetting(new XSettings(
                 settingsId: xuser.userId,
               ));
@@ -87,7 +94,54 @@ class XApi{
             }        
     });
   }
+  
+  
+  Future<String> updateProfile(XUser xuser, String currentPassword, String newPassword) async{ 
+    try{
+      Firestore.instance.document("users/${xuser.userId}").setData(xuser.classObjConvertToJson()); 
+      //updateFirebaseUser 
+      UserUpdateInfo userUpdateInfo = UserUpdateInfo();
+      userUpdateInfo.displayName = "${xuser.firstName}.${xuser.lastName}" ;
+      userUpdateInfo.photoUrl = xuser.imageUrl;
+      FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+      if(firebaseUser != null){
+        print("ifff içine girdi");
+        firebaseUser.updateProfile(userUpdateInfo);
+        //password change
+        if(currentPassword != "" || newPassword != ""  ){
+            firebaseUser= await reAuthenticate(currentPassword);
+            if(firebaseUser != null && newPassword.trim() != "" && currentPassword.trim() != "" ){
+              firebaseUser.updatePassword(newPassword);
+              await FirebaseAuth.instance.signInWithEmailAndPassword(email: xuser.email, password: newPassword);
+            }else{
+              return throw("myError,  Password not be empty ");
+            }
+        }
+      }
+      return "ok";
+    }catch(e){
+        throw "$e"?.split(',')[1];
+    }
+  }
 
+  Future<FirebaseUser > reAuthenticate(String currentPassword) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    AuthResult authResult = await user.reauthenticateWithCredential(
+      EmailAuthProvider.getCredential(
+        email: user.email,
+        password: currentPassword,
+      ),
+    );
+    return authResult.user;
+  }
+
+
+  Future<String> uploadProfileImage(File image, String location)async{
+    StorageReference  storageReference = FirebaseStorage().ref().child(location);
+    await storageReference.putFile(image).onComplete;
+    return await storageReference.getDownloadURL();
+  }
+  
   Future addUserSettingsDB(XUser xuser) async {  //kullanıcı firebase db kaydediliyor
     checkingUser(xuser.userId).then((value) async {
       if (!value) {

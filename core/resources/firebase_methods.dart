@@ -25,9 +25,11 @@ class XFirebaseMethod extends ChangeNotifier{
   static XEventApi _eventApi = XEventApi("events");
 
   //SİGN UP KISIM
-  Future<String> signUp(String email, String password) => xapi.createUser(email,password);
+  Future<String> signUp(String displayName,String email, String password) => xapi.createUser(displayName,email,password);
 
   Future<void> addUserSettingsDB(XUser xuser) => xapi.addToDatabaseUser(xuser); 
+
+  Future<void> updateProfileInfo(XUser xuser,String currentPassword, String newPassword) async => await xapi.updateProfile(xuser, currentPassword, newPassword);
 
   Future<bool> checkUserExist(String userId) => xapi.checkingUser(userId);
  
@@ -35,7 +37,7 @@ class XFirebaseMethod extends ChangeNotifier{
 
   Future<String> logInUser(String email, String password, context) => xapi.signIn(email, password, context); 
 
-  Future<XUser>  getUserFirestore(String userId) => xapi.getUserFromFirestore(userId);
+  Future<XUser>  getUserFirestore(String userId) => xapi.getUserFromFirestore(userId); 
 
   Future<XSettings> getSettingsFirestore(String settingsId)  =>  xapi.getSettingsFirestore(settingsId);
 
@@ -53,6 +55,7 @@ class XFirebaseMethod extends ChangeNotifier{
 
   Future<void> forgotPasswordEmail(String email) => xapi.sendPassword(email);
 
+  Future<String> uploadProfileImage(File file, String location) => xapi.uploadProfileImage(file,location); 
 
   //FOR EVENT
   Future<void> addEventDatabase(XEvent xevent) =>  _eventApi.addEventToDatabase(xevent);
