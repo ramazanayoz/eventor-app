@@ -103,16 +103,19 @@ void makeNotify(){
           imageUrl: _imageUrl,
           imageLoc: _imageLocation
         );
-        await firebaseMethod.updateProfileInfo(user, _currentPassword.text, _newPassword.text);
-        editProfileProvider.imageUrl= _imageUrl;
+        await firebaseMethod.updateProfileInfo(user, _currentPassword.text, _newPassword.text, context);
+        await XFirebaseMethod.storeUserInfoLocal(user);
+        editProfileProvider.imageUrl= _imageUrl; 
         XStateWidget.of(context).state.user = user;  
+
         Navigator.of(context).pop();
+        Navigator.pushNamed(context, '/');
       }
     }else{
       print("paswords already same different");
       throw("New password must be different from current password");
     }
-    }catch(e){
+    }catch(e){ 
       
       print("eerror $e");
       Flushbar(
@@ -286,10 +289,13 @@ void makeNotify(){
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-            size: 22.0,
+          InkWell(
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+              size: 22.0,
+            ),
+            onTap: () => Navigator.of(context).pop(),
           ),
           new Padding(
             padding: EdgeInsets.only(left: 25.0),

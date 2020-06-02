@@ -48,7 +48,6 @@ class _XStateWidgetState extends State<XStateWidget> {
   }
 
   Future<Null> initUser() async {
-   // print('not:XStateWidget da...initUser... working');
     FirebaseUser firebaseUserAuth = await _xAuthModel.getCurrentFirebaseUser(); //şuanki kullanıcıya ulaş
     XUser user = await _xAuthModel.getUserLocal(); //telefona kaydedilmiş giriş bilgisi alınıyot
     XSettings settings = await _xAuthModel.getSettingsLocal(); //yerel ayarları al

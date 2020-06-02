@@ -5,6 +5,7 @@ import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/location.dart';
 import 'package:eventor/denem9-firebaseTum/core/resources/event_api.dart';
 import 'package:eventor/denem9-firebaseTum/core/resources/user_api.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../core/services/state_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +30,7 @@ class XFirebaseMethod extends ChangeNotifier{
 
   Future<void> addUserSettingsDB(XUser xuser) => xapi.addToDatabaseUser(xuser); 
 
-  Future<void> updateProfileInfo(XUser xuser,String currentPassword, String newPassword) async => await xapi.updateProfile(xuser, currentPassword, newPassword);
+  Future<void> updateProfileInfo(XUser xuser,String currentPassword, String newPassword, BuildContext context) async => await xapi.updateProfile(xuser, currentPassword, newPassword, context);
 
   Future<bool> checkUserExist(String userId) => xapi.checkingUser(userId);
  
@@ -43,7 +44,7 @@ class XFirebaseMethod extends ChangeNotifier{
 
   Future<FirebaseUser> getCurrentFirebaseUser() => xapi.getCurrentFirebaseUser();
 
-  static Future<String> storeUserInfoLocal(XUser user) => storeUserInfoLocal(user);
+  static Future<String> storeUserInfoLocal(XUser user) => XApi.storeUserInfoToLocal(user); 
 
   Future<String> storeSettingsLocal(XSettings settings) =>xapi.storeSettingsLocal(settings);
 

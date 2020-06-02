@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/state_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/settings.dart';
@@ -33,7 +34,7 @@ class XApi{
     AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
     String userId = authResult.user.uid;
     XUser user = await getUserFromFirestore(userId); //XUser nesnesi oluşturuluyor firebaseden alınan verilerle
-    await storeUserInfoLocal(user); //user bilgileri string olarak telefolna depolanır
+    await storeUserInfoToLocal(user); //user bilgileri string olarak telefolna depolanır
     XSettings settings = await getSettingsFirestore(userId);
     await storeSettingsLocal(settings);
     XStateWidget.of(context).initUser();
@@ -96,7 +97,7 @@ class XApi{
   }
   
   
-  Future<String> updateProfile(XUser xuser, String currentPassword, String newPassword) async{ 
+  Future<String> updateProfile(XUser xuser, String currentPassword, String newPassword, BuildContext context) async{ 
     try{
       Firestore.instance.document("users/${xuser.userId}").setData(xuser.classObjConvertToJson()); 
       //updateFirebaseUser 
@@ -117,6 +118,9 @@ class XApi{
               return throw("myError,  Password not be empty ");
             }
         }
+        firebaseUser = await FirebaseAuth.instance.currentUser();
+        firebaseUser.reload();
+        XStateWidget.of(context).state.firebaseUserAuth = firebaseUser;
       }
       return "ok";
     }catch(e){
@@ -193,7 +197,7 @@ class XApi{
 
 
   //SAVİNG USER INFO TO lOCAL STRAGE
-  Future<String> storeUserInfoLocal(XUser user) async {
+  static Future<String> storeUserInfoToLocal(XUser user) async {
     //print(":auth: storeUserLocal(XUser user) fonk working");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String storeUser = classObjConvertToJsonString(user);
