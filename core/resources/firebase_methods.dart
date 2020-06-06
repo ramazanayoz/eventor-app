@@ -17,6 +17,8 @@ import '../models/settings.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'location_api.dart';
+
 enum authProblems { UserNotFound, PasswordNotValid, NetworkError, UnknownError }
 
 class XFirebaseMethod extends ChangeNotifier{
@@ -24,7 +26,7 @@ class XFirebaseMethod extends ChangeNotifier{
   //VAR
   XApi xapi = XApi("users");
   static XEventApi _eventApi = XEventApi("events");
-
+  XLocationApi _locationApi = XLocationApi();
   //SİGN UP KISIM
   Future<String> signUp(String displayName,String email, String password) => xapi.createUser(displayName,email,password);
 
@@ -67,8 +69,11 @@ class XFirebaseMethod extends ChangeNotifier{
 
   Future<String> getImageUrl(String textImageLocation) => _eventApi.getImageUrl(textImageLocation); 
 
+  Future<List<XEvent>> fetchAllEvents(FirebaseUser user) => _eventApi.fetchAllEvents(user); 
 
+  Future<XLocation> getLocationFromId(String id) => _locationApi.getLocationFromId(id); 
 
+  Future<List<XLocation>> fetchAllLocation(FirebaseUser user) => _locationApi.fetchAllLocation(user);
 
   //EXCEPTİONS
   String getExceptionText(Exception e) {

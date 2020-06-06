@@ -38,4 +38,16 @@ class XLocation {
     "address" : address,
   };
 
+  static XLocation mapConvertClass(Map<String, dynamic> mapData) => XLocation(
+    country: mapData["country"],
+    state: mapData["state"],
+    city: mapData["city"],
+    sublocality: mapData["sublocality"],
+    thoroughfare: mapData["thoroughfare"],
+    subThoroughfare: mapData["subThoroughfare"],
+    postalCode: mapData["postalCode"],
+    address: mapData["address"],
+    eventId: mapData["eventId"],
+  );
+
 }

@@ -146,9 +146,9 @@ class _XEventCreatePageState extends State<XEventCreatePage> with AutomaticKeepA
       ));
       //Location save to db
       await _authModel.addLocationDatabase(new XLocation( 
-        country: _eventFormProv.city,
+        country: _eventFormProv.country,
         state: _eventFormProv.state,
-        city: _eventFormProv.address,
+        city: _eventFormProv.city,
         sublocality: _eventFormProv.sublocality,
         thoroughfare: _eventFormProv.thoroughfare,
         subThoroughfare: _eventFormProv.subThoroughfare,

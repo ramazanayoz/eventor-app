@@ -7,12 +7,14 @@ import 'package:eventor/denem9-firebaseTum/core/models/category.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/services/app_state.dart';
 import 'package:eventor/denem9-firebaseTum/ui/styleguide.dart';
+import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/searchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'event_page_background.dart';
 
 class XEventScreen extends StatelessWidget {
+
 
   //DESİGNS  
   @override
@@ -45,9 +47,30 @@ class XEventScreen extends StatelessWidget {
                         ],
                       )
                     ),
+                    
                     new Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: Text("What's Up", style: whiteHeadingTextStyle),
+                      child: Row(
+                        children:[
+                          Text("What's Up", style: whiteHeadingTextStyle),
+                          SizedBox(width: 20),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: new IconButton(
+                              icon: new Icon(
+                                Icons.search,
+                                color: Color(0x99FFFFFF),
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => XSearchSreen() ));
+                              },
+                            )
+                          )
+                        ]
+                      )
                     ),
                     new Padding(
                       padding: const EdgeInsets.symmetric(vertical:  24.0),

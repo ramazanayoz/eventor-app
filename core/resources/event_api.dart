@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/event.dart';
 import 'package:eventor/denem9-firebaseTum/core/models/location.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 
@@ -66,6 +67,21 @@ class XEventApi{
     }catch(e){
       print(e.message);
     }
+  }
+
+  Future<List<XEvent>> fetchAllEvents(FirebaseUser currentUser) async {
+    List<XEvent> eventList = List<XEvent>();
+
+    QuerySnapshot _querySnapshot = await _db.collection("events").getDocuments();
+
+    for(var i = 0; i < _querySnapshot.documents.length; i++){
+      if(_querySnapshot.documents[i].documentID != currentUser.uid){
+        eventList.add(XEvent.mapJsonConvertToClassObj(_querySnapshot.documents[i].data));
+      }
+    }
+    return eventList;
+
+
   }
  
 

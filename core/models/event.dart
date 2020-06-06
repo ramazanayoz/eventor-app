@@ -65,6 +65,7 @@ class XEvent{
         maxParticipant: json["maxParticipant"],
         briefDescription: json["briefDescription"],
         description: json["description"],
+        eventId: json["eventId"],
       ); //  XEvent nesnesi oluşturuluyor firebaseden alınan parametrelerle
 
   Map<String, dynamic> classObjConvertToJson() => {//event bilgileri json yani map formate çevriliyor
