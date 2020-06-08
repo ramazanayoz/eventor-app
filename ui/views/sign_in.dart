@@ -121,7 +121,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         onPressed: () {
           _emailLogin( 
-              email: _email.text, password: _password.text, context: context);
+              email: _email.text, password: _password.text.trim(), context: context);
         },
         padding: EdgeInsets.all(12),
         color: Theme.of(context).primaryColor,

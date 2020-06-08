@@ -76,9 +76,9 @@ void makeNotify(){
     XFirebaseMethod _xFirebaseMethod = new XFirebaseMethod();
     _currentUser =  await _xFirebaseMethod.getCurrentFirebaseUser().then((firebaseUser) => firebaseUser);
     print("photo url  ${_imageUrl}" );
-    _firstName.text = _currentUser?.displayName?.split(".")[0];
+    _firstName.text = _currentUser?.displayName?.split(".")?.elementAt(0);
     print("_firstName.text ${_firstName.text}");
-    _lastName.text = _currentUser?.displayName?.split(".")[1];
+    _lastName.text = _currentUser?.displayName?.split(".")?.elementAt(1);
     _email.text = _currentUser?.email;
     _phoneNumber.text = _currentUser?.phoneNumber;
   }
@@ -86,9 +86,11 @@ void makeNotify(){
   saveToDb() async{
     try{
     print("savetodb fonk working");
-    AuthCredential authCredential = EmailAuthProvider.getCredential(email:_currentUser.email, password:_currentPassword.text);
+    print("email: ${_currentUser.email.trim()} password: ${_currentPassword.text}" "new password: ${_newPassword.text}");
+    AuthCredential authCredential = EmailAuthProvider.getCredential(email:_currentUser.email.trim(), password:_currentPassword.text.trim());
     if(_currentPassword.text != _newPassword.text || _currentPassword.text.trim() == "" ){
       if(authCredential != null || _newPassword.text.trim() == "" ){ 
+        print("burada $authCredential");
         XFirebaseMethod firebaseMethod = XFirebaseMethod();
         if(_image != null){
           _imageLocation = "images/profile-photo/${_currentUser.displayName}-${_currentUser.uid}.jpg";
@@ -103,7 +105,7 @@ void makeNotify(){
           imageUrl: _imageUrl,
           imageLoc: _imageLocation
         );
-        await firebaseMethod.updateProfileInfo(user, _currentPassword.text, _newPassword.text, context);
+        await firebaseMethod.updateProfileInfo(user, _currentPassword.text.trim(), _newPassword.text.trim(), context);
         await XFirebaseMethod.storeUserInfoLocal(user);
         editProfileProvider.imageUrl= _imageUrl; 
         XStateWidget.of(context).state.user = user;  
@@ -359,7 +361,10 @@ void makeNotify(){
                                       shape: BoxShape.circle,
                                       image: new DecorationImage(
                                         image: _image != null  
-                                          ? new FileImage(_image) : _imageUrl == "" ? new ExactAssetImage( 'assets/images/as.png' ): NetworkImage(_imageUrl) ,
+                                          ? new FileImage(_image) 
+                                          : _imageUrl == ""  || _imageUrl == null 
+                                            ? new ExactAssetImage( 'assets/images/as.png' )
+                                            : NetworkImage(_imageUrl) ,
                                         fit: BoxFit.cover,
                                       ),
                                     )

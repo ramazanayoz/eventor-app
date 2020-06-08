@@ -256,7 +256,7 @@ class _XFirstStepState extends State<XFirstStep> {
                       okButtonLabel: 'OK',
                       cancelButtonLabel: 'CANCEL',
                       hintText: 'Please choose one or more',
-                      value: _myCategoryList ,
+                      initialValue: _myCategoryList ,
                         onSaved: (value) {
                           setState(() {
                             _myCategoryList = value;

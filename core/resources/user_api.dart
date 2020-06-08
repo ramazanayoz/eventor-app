@@ -110,10 +110,11 @@ class XApi{
         firebaseUser.updateProfile(userUpdateInfo);
         //password change
         if(currentPassword != "" || newPassword != ""  ){
+            print("firebaseUser::: $firebaseUser");
             firebaseUser= await reAuthenticate(currentPassword);
             if(firebaseUser != null && newPassword.trim() != "" && currentPassword.trim() != "" ){
-              firebaseUser.updatePassword(newPassword);
-              await FirebaseAuth.instance.signInWithEmailAndPassword(email: xuser.email, password: newPassword);
+              await firebaseUser.updatePassword(newPassword);
+             await FirebaseAuth.instance.signInWithEmailAndPassword(email: xuser.email, password: newPassword);
             }else{
               return throw("myError,  Password not be empty ");
             }

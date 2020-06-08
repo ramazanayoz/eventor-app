@@ -83,7 +83,7 @@ class _XCategoryWidgetState extends State<XCategoryWidget>  with AutomaticKeepAl
                   okButtonLabel: 'OK',
                   cancelButtonLabel: 'CANCEL',
                   hintText: 'Please choose one or more',
-                  value: this.myCategoryList,
+                  initialValue: this.myCategoryList,
                     onSaved: (value) {
                       if (value == null) return;
                       setState(() {

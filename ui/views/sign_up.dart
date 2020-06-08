@@ -175,7 +175,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               firstName: _firstName.text,
               lastName: _lastName.text,
               email: _email.text,
-              password: _password.text,
+              password: _password.text.trim(),
               context: context);
         },
         padding: EdgeInsets.all(12),

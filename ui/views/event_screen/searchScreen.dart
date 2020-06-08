@@ -68,7 +68,9 @@ class _XSearchSreenState extends State<XSearchSreen> {
           if(matchesEventDesc || matchesEventTitle){
             for(var i = 0 ; i< _allLocationList.length; i++ ){
               if(_allLocationList[i].eventId == xevent.eventId){
-                _findingLocationList.add(_allLocationList[i]);
+                setState(() {
+                  _findingLocationList.add(_allLocationList[i]);
+                });
                 print("dada: ${_allLocationList[i]}");
               }
             }
@@ -76,7 +78,9 @@ class _XSearchSreenState extends State<XSearchSreen> {
           return (matchesEventDesc || matchesEventTitle); 
         }).toList() : [];
         //print("suggestionList: ${suggestionList[0].title}");
-        _suggestionEventList = suggestionList;
+       setState(() {
+          _suggestionEventList = suggestionList;
+       });
   }
 
 
@@ -164,12 +168,13 @@ class _XSearchSreenState extends State<XSearchSreen> {
           itemBuilder: (context, index) {
             var event;
             var location;
-            if(_suggestionEventList != null){
-               event = _suggestionEventList[index];
-            }
-            if(_findingLocationList != null){
-                location = _findingLocationList[index];
-            }
+            print("tetsting");
+            try{
+              event = _suggestionEventList?.elementAt(index) ?? null;                   
+            }catch(e){ print("ERRORinSearchScreen: $e"); }
+            try{
+              location = _findingLocationList?.elementAt(index) ?? null;            
+            }catch(e){ print("ERRORinSearchScreen: $e"); }
            // print("location ${location}");
             return eventCart(event, location);
           }

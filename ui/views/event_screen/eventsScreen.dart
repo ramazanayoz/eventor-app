@@ -1,3 +1,4 @@
+import 'package:eventor/denem9-firebaseTum/core/models/location.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_details_page/event_details_page.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/category_widget.dart';
 import 'package:eventor/denem9-firebaseTum/ui/views/event_screen/event_widget.dart';
@@ -14,6 +15,20 @@ import 'package:provider/provider.dart';
 import 'event_page_background.dart';
 
 class XEventScreen extends StatelessWidget {
+
+
+
+// FONK
+  XLocation matchesLocation(XEvent event, List<XLocation> locationList){
+    XLocation xlocation;
+    for(var i =0; i<locationList.length; i++){
+      if(locationList[i].eventId == event.eventId){
+        xlocation = locationList[i];
+        return xlocation;
+      }
+    }
+    return xlocation;
+  }
 
 
   //DESİGNS  
@@ -92,32 +107,46 @@ class XEventScreen extends StatelessWidget {
                         child: Consumer<XAppState>(
                           builder: (context, xappState ,widget) => StreamBuilder(
                               stream: Firestore.instance.collection("events").snapshots(),
-                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
-                                List<XEvent> listevents= [];
-                                if(snapshot.hasData){
-                                  listevents = snapshot.data.documents
-                                    .map((doc) => XEvent.mapJsonConvertToClassObj(doc.data)).toList();
-                                    print("${xappState.selectedCategoryName}");
-                                }
-                                  return Column(
-                                    children: <Widget>[
-                                     
-                                        for(final _event in listevents.where( (e) =>
-                                          xappState.selectedCategoryName.contains("All") ?  true
-                                          : e.category.contains(xappState.selectedCategoryName) ) )
-                                            GestureDetector(     //for ile tekrar tekrar oluşturulur
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) => XEventDetailsPage(xevent: _event),
-                                                  )
-                                                ); 
-                                              }, 
-                                              child: XEventWidget(xevent: _event),  
-                                            ),
+                              builder: (context, AsyncSnapshot<QuerySnapshot> eventSnapshot){
+                                return StreamBuilder(
+                                  stream: Firestore.instance.collection("locations").snapshots(),
+                                  builder: (context, AsyncSnapshot<QuerySnapshot> locationSnapshot){
+                                    //eventSnapshot get dataList
+                                    List<XEvent> listevents= [];
+                                    if(eventSnapshot.hasData){
+                                      listevents = eventSnapshot.data.documents
+                                        .map((doc) => XEvent.mapJsonConvertToClassObj(doc.data)).toList();
+                                        print("${xappState.selectedCategoryName}");
+                                    }
+                                    //locationSnapshot get dataList
+                                    List<XLocation> listLocations = [];
+                                    if(locationSnapshot.hasData){
+                                      listLocations = locationSnapshot.data.documents
+                                        .map((docSnap) => XLocation.mapConvertClass(docSnap.data)).toList();
+                                    }
+
+                                    return Column(
+                                      children: <Widget>[
                                       
-                                    ],
-                                  );  
+                                          for(final _event in listevents.where( (e) =>
+                                            xappState.selectedCategoryName.contains("All") ?  true
+                                            : e.category.contains(xappState.selectedCategoryName) ) )
+                                              GestureDetector(     //for ile tekrar tekrar oluşturulur
+                                                onTap: () {
+                                                  //print("locacation: $location");
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) => XEventDetailsPage(xevent: _event),
+                                                    )
+                                                  ); 
+                                                }, 
+                                                child: XEventWidget(xevent: _event, xlocation: matchesLocation(_event, listLocations)),  
+                                              ),
+                                        
+                                      ],
+                                    );  
+                                  },
+                                );
 
                               },
                           )
